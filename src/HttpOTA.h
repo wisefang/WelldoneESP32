@@ -1,3 +1,14 @@
+/**********************************************************
+ * @file    HttpOTA.h
+ * @author  Majunfang (Majf@Welldone-e.com)
+ * @brief 
+ * @version V1.0
+ * @date    2024-08-24
+ * 
+ * This work is licensed under a BSD style license. See
+ * http://www.mathertel.de/License.aspx
+ * 
+ ***********************************************************/
 #ifndef __HTTP_OTA_H__
 #define __HTTP_OTA_H__
 #include <HTTPUpdate.h>

@@ -5,7 +5,8 @@
  * @version V1.0
  * @date    2024-08-23
  * 
- * @copyright  Copyright © 2024 Huidong All Rights Reserved
+ * This work is licensed under a BSD style license. See
+ * http://www.mathertel.de/License.aspx
  * 
  ***********************************************************/
 #include "WelldoneEsp32.h"
