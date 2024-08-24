@@ -5,8 +5,6 @@
  * @version V1.0
  * @date    2024-08-24
  * 
- * This work is licensed under a BSD style license. See
- * http://www.mathertel.de/License.aspx
  * 
  ***********************************************************/
 #ifndef __RESET_H__
@@ -16,15 +14,17 @@ class Reset
 {
   public:
     Reset():_resetDelayTime_ms(2000){}
+    //ESP32 reset,Default 2000ms,reset(uint32_t resetDelayTime_ms) 
     void reset() {
       _resetDelayTime_ms = 2000;//default 2s
-      begin();
+      _begin();
     }
     void reset(uint32_t resetDelayTime_ms){
       _resetDelayTime_ms = resetDelayTime_ms;//set reset delay time
-      begin();
+      _begin();
     }
-    void begin(void)
+  private:
+    void _begin(void)
     {
       xTaskCreate(taskFunction, "reset_Task", 1*1024, this, 1, &_taskHandle);
     }

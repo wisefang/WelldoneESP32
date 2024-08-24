@@ -1,2 +1,2 @@
- # This work is licensed under a BSD style license. See
- # http://www.mathertel.de/License.aspx
+This is a WelldoneESP32 lib 
+MIT license, all text above must be included in any redistribution
