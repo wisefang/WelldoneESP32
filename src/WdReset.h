@@ -7,8 +7,8 @@
  * 
  * 
  ***********************************************************/
-#ifndef __RESET_H__
-#define __RESET_H__
+#ifndef __WD_RESET_H__
+#define __WD_RESET_H__
 #include <Arduino.h>
 class Reset
 {
