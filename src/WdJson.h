@@ -4,8 +4,10 @@
 #include <ArduinoJson.h>
 #include "DeviceNo.h"
 #include "WdWifiSet.h"
+#include "AsyncTCP.h"
 // 回调函数类型定义
 typedef void (*CommandCallback)(const JsonObject&);
+typedef void (*CommandCallback_tcp)(const JsonObject&,AsyncClient* client);
 class WdJson:public DeviceNo,public WdWifiSet
 {
   public:
@@ -28,7 +30,32 @@ class WdJson:public DeviceNo,public WdWifiSet
     void onOtherCMD(CommandCallback callback) {
       onOtherCMDCallback = callback;
     }
+    void onOtherCMD_tcp(CommandCallback_tcp callback) {
+      onOtherCMDCallback_tcp = callback;
+    
+    }
     //解析Json字符串，执行通用指令
+    void parseJsonString(String jsonString,AsyncClient* client)
+    {
+      // 创建 JSON 文档
+      JsonDocument  doc;
+      // 解析 JSON 字符串
+      DeserializationError error = deserializeJson(doc, jsonString);
+      // 检查解析是否成功
+      if (error)
+      {
+        log_e("DeserializationError: %s", error.c_str());
+        return;
+      }
+       // 获取 JSON 对象
+      JsonObject json = doc.as<JsonObject>();
+      if (onOtherCMDCallback_tcp) {
+    void* onOtherCMDArg;
+          onOtherCMDCallback_tcp(json, client);
+      } else {
+          log_w("onOtherCMDCallback_tcp is null");
+      }
+    }
     void parseJsonString(String jsonString)
     {
       // 创建 JSON 文档
@@ -54,6 +81,8 @@ class WdJson:public DeviceNo,public WdWifiSet
     }
   private:
     CommandCallback onOtherCMDCallback;
+    CommandCallback_tcp onOtherCMDCallback_tcp;
+    void* onOtherCMDArg;
     void _handleCommand(const JsonObject& json) {
         if (json.containsKey("CmdCode")) {
             String command = json["CmdCode"].as<String>();

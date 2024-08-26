@@ -5,7 +5,7 @@
 #include "WdJson.h"
 
 
-const static IPAddress serverIP(192,168,3,155);
+const static IPAddress serverIP(192,168,16,222);
 const static int LOCAL_TCP_SERVER_PORT = 1234;
 const static int REMOTE_TCP_SERVER_PORT = 1234;
 class WdTCP: public WdJson

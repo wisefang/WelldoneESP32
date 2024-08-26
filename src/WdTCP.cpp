@@ -81,7 +81,8 @@ void WdTCP::_asClientOnData(AsyncClient* client, void* data, size_t len)
   if(len > 10)//if data is more than 10 bytes, it is a command
   {
     String data_from_server(static_cast<char*>(data)); 
-    parseJsonString(data_from_server); // handle the command
+    parseJsonString(data_from_server,client); // handle the command
+    client->write(data_from_server.c_str());
   }
 }
 /**********************************************************
