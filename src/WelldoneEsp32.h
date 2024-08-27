@@ -44,10 +44,7 @@ class WelldoneEsp32:public HttpOTA,public Reset,public WdWifi
                 for(int i = 0; i < 3; i++){
                     if (com[i]->available() > 0) {
                         String data = com[i]->readStringUntil('\n');
-                        parseJsonString(data);
-                        if (_callback) {
-                            _callback(data);
-                        }
+                        parseJsonString(data,com[i]);                        
                     }
                 }
                 vTaskDelay(50 / portTICK_PERIOD_MS);                

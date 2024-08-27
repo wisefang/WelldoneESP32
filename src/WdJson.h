@@ -6,12 +6,13 @@
 #include "WdWifiSet.h"
 #include "AsyncTCP.h"
 // 回调函数类型定义
-typedef void (*CommandCallback)(const JsonObject&);
-typedef void (*CommandCallback_tcp)(const JsonObject&,AsyncClient* client);
+
+typedef void (*CommandCallback_com)(const JsonObject&,HardwareSerial*);
+typedef void (*CommandCallback_tcp)(const JsonObject&,AsyncClient*);
 class WdJson:public DeviceNo,public WdWifiSet
 {
   public:
-    WdJson():onOtherCMDCallback(nullptr) {};
+    WdJson():_onOtherCMDCallback_com(nullptr), _onOtherCMDCallback_tcp(nullptr){};
     template<typename T>
     String getJsonString(String cmdCode, T result){
       JsonDocument output_doc;       
@@ -27,92 +28,37 @@ class WdJson:public DeviceNo,public WdWifiSet
       serializeJson(output_doc, outputString);
       return outputString;
     }
-    void onOtherCMD(CommandCallback callback) {
-      onOtherCMDCallback = callback;
+    //解析Json字符串，执行通用指令,com为串口,client为tcp客户端
+    void onOtherCMD_com(CommandCallback_com callback) {
+      _onOtherCMDCallback_com = callback;
     }
     void onOtherCMD_tcp(CommandCallback_tcp callback) {
-      onOtherCMDCallback_tcp = callback;
+      _onOtherCMDCallback_tcp = callback;    
+    }    
     
-    }
     //解析Json字符串，执行通用指令
     void parseJsonString(String jsonString,AsyncClient* client)
     {
-      // 创建 JSON 文档
-      JsonDocument  doc;
-      // 解析 JSON 字符串
-      DeserializationError error = deserializeJson(doc, jsonString);
-      // 检查解析是否成功
-      if (error)
-      {
-        log_e("DeserializationError: %s", error.c_str());
-        return;
-      }
-       // 获取 JSON 对象
-      JsonObject json = doc.as<JsonObject>();
-      if (onOtherCMDCallback_tcp) {
-    void* onOtherCMDArg;
-          onOtherCMDCallback_tcp(json, client);
-      } else {
-          log_w("onOtherCMDCallback_tcp is null");
-      }
+      _deserial_string(jsonString,client);     
     }
-    void parseJsonString(String jsonString)
+    void parseJsonString(String jsonString,HardwareSerial* com)
     {
-      // 创建 JSON 文档
-      JsonDocument  doc;
-      // 解析 JSON 字符串
-      DeserializationError error = deserializeJson(doc, jsonString);
-      // 检查解析是否成功
-      if (error)
-      {
-        log_e("DeserializationError: %s", error.c_str());
-        return;
-      }
-       // 获取 JSON 对象
-      JsonObject json = doc.as<JsonObject>();
-
-      // 处理命令
-      _handleCommand(json);          
+      _deserial_string(jsonString,com);
     } 
-    static void parseJsonString_static(void *arg,String jsonString)
+    static void parseJsonString_static(void *arg,String jsonString,HardwareSerial* com)
     {
       WdJson *wdJson = (WdJson *)arg;
-      wdJson->parseJsonString(jsonString);
+      wdJson->parseJsonString(jsonString,com);
     }
   private:
-    CommandCallback onOtherCMDCallback;
-    CommandCallback_tcp onOtherCMDCallback_tcp;
-    void* onOtherCMDArg;
-    void _handleCommand(const JsonObject& json) {
-        if (json.containsKey("CmdCode")) {
-            String command = json["CmdCode"].as<String>();
-
-            if (command == "SETUP") {
-                if (json.containsKey("Body") && json["Body"].containsKey("SSID") && json["Body"].containsKey("PWD")) {
-                    String ssid = json["Body"]["SSID"].as<String>();
-                    String pwd = json["Body"]["PWD"].as<String>();
-                    save_wifi_set(ssid, pwd);
-                    log_i("SSID: %s, PWD: %s", ssid.c_str(), pwd.c_str());                                        
-                }
-            } else if (command == "noset") {
-                Serial.println("Handling noset command");
-            } else {
-                log_i("Handling other command");
-                if (onOtherCMDCallback) {
-                    onOtherCMDCallback(json);
-                } else {
-                    log_w("onOtherCMDCallback is null");
-                }
-            }
-        } else {
-            log_i("CmdCode not found");
-            if (onOtherCMDCallback) {
-                onOtherCMDCallback(json);
-            } else {
-                log_w("onOtherCMDCallback is null");
-            }
-        }
-    }//end _handleCommand
+    CommandCallback_com _onOtherCMDCallback_com;
+    CommandCallback_tcp _onOtherCMDCallback_tcp; 
+    
+  private:
+    void _deserial_string(String jsonString,AsyncClient* client);
+    void _deserial_string(String jsonString,HardwareSerial* com);
+    String _handleGeneralCommand(const JsonObject& json);   
+    
 };
 
 #endif /* __WD_JSON_H__ */

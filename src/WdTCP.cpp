@@ -134,7 +134,7 @@ void WdTCP::_asServerOnData(AsyncClient *client, void *data, size_t len)
   if (len > 10)//
   {
     String data_from_client(static_cast<char*>(data));
-    parseJsonString(data_from_client); // handle the command
+    parseJsonString(data_from_client,client); // handle the command
   }  
 }
 /**********************************************************

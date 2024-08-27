@@ -1,17 +1,15 @@
 #include <Arduino.h>
 #include "WelldoneESP32.h"
-void handleOtherCommand(const JsonObject& json) {
-    Serial.println("Handling other command:");
-    serializeJson(json, Serial);
-    Serial.println();
+void handleOtherCommand_com(const JsonObject& json,HardwareSerial* com) {
+    com->println("Handling other command fro com:");
+    
 }
 
 void handleOtherCommand_tcp(const JsonObject& json,AsyncClient* client) {
     Serial.println("Handling other command from tcp:");
     serializeJson(json, Serial);
     if(client)
-    client->write("Handling other command from client");
-  
+    client->write("Handling other command from client");  
 }
 volatile size_t sent_bytes = 0, received_bytes = 0;
 void onReceiveFunction(const String &data) {
@@ -24,7 +22,7 @@ void setup() {
   // put your setup code here, to run once:
   // WdESP32.onOtherCMD(handleOtherCommand);
   WdESP32.onOtherCMD_tcp(handleOtherCommand_tcp);
-  WdESP32.onSerialReceive(onReceiveFunction);
+  WdESP32.onOtherCMD_com(handleOtherCommand_com);
   WdESP32.init();  
   
   // uint32_t device_num_uint = WdESP32.get_device_num_uint();

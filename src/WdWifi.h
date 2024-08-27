@@ -5,7 +5,8 @@
 
 #include "WdTCP.h"
 #include "WdJson.h"
-class WdWifi:public WdTCP
+#include "WdOTA.h"
+class WdWifi:public WdTCP,public WdOTA
 {
   public:
     
@@ -59,7 +60,7 @@ class WdWifi:public WdTCP
             log_i("Connected to the WiFi network");
             log_i("IP Address: %s", WiFi.localIP().toString().c_str());
             // Start OTA service and TCP service
-            // f12_Pagehtml.start_ota_server();
+            otaBegin();
             as_client_begin(serverIP,REMOTE_TCP_SERVER_PORT);
             as_server_begin(LOCAL_TCP_SERVER_PORT);
         }

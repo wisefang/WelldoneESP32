@@ -7,5 +7,5 @@
  * 
  ***********************************************************/
 #include "WelldoneEsp32.h"
-#include "DeviceNo.h"
+
 WelldoneEsp32 WdESP32;
