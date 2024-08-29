@@ -1,14 +1,14 @@
-#ifndef __WD_TCP_H__
-#define __WD_TCP_H__
+#ifndef __02WD_TCP_H__
+#define __02WD_TCP_H__
 #include <Arduino.h>
 #include <AsyncTCP.h>
-#include "WdJson.h"
+#include "03WdOTA.h"
 
 
 const static IPAddress serverIP(192,168,16,222);
 const static int LOCAL_TCP_SERVER_PORT = 1234;
 const static int REMOTE_TCP_SERVER_PORT = 1234;
-class WdTCP: public WdJson
+class WdTCP: public WdOTA
 {
   public:
     void as_client_begin(IPAddress ip, uint16_t port);

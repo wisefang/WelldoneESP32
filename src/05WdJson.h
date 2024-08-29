@@ -1,15 +1,16 @@
-#ifndef __WD_JSON_H__
-#define __WD_JSON_H__
+#ifndef __05WD_JSON_H__
+#define __05WD_JSON_H__
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include "DeviceNo.h"
-#include "WdWifiSet.h"
+#include "06DeviceNo.h"
+#include "06WdWifiSet.h"
+#include "06BuildTime.h"
 #include "AsyncTCP.h"
 // 回调函数类型定义
 
 typedef void (*CommandCallback_com)(const JsonObject&,HardwareSerial*);
 typedef void (*CommandCallback_tcp)(const JsonObject&,AsyncClient*);
-class WdJson:public DeviceNo,public WdWifiSet
+class WdJson:public DeviceNo,public WdWifiSet,public BuildTime
 {
   public:
     WdJson():_onOtherCMDCallback_com(nullptr), _onOtherCMDCallback_tcp(nullptr){};

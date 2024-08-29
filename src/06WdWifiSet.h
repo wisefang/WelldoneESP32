@@ -1,5 +1,5 @@
-#ifndef __WD_WIFI_SET_H__
-#define __WD_WIFI_SET_H__
+#ifndef __06WD_WIFI_SET_H__
+#define __06WD_WIFI_SET_H__
 #include <Arduino.h>
 #include <Preferences.h>
 class WdWifiSet

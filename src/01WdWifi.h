@@ -1,12 +1,9 @@
-#ifndef __WD_WIFI_H__
-#define __WD_WIFI_H__
+#ifndef __01WD_WIFI_H__
+#define __01WD_WIFI_H__
 #include <Arduino.h>
 #include <WiFi.h>
-
-#include "WdTCP.h"
-#include "WdJson.h"
-#include "WdOTA.h"
-class WdWifi:public WdTCP,public WdOTA
+#include "02WdTCP.h"
+class WdWifi:public WdTCP
 {
   public:
     

@@ -1,5 +1,5 @@
-#ifndef __DEVICE_NO_H__
-#define __DEVICE_NO_H__
+#ifndef __06DEVICE_NO_H__
+#define __06DEVICE_NO_H__
 #include <Arduino.h>
 #include <Preferences.h>
 
@@ -30,6 +30,11 @@ class DeviceNo
       _preferences_device_no.putUInt("num_uint", _device_num_uint);          
       _device_no = _to_devie_no(_device_num_uint);
       _preferences_device_no.end();
+    }
+  static void SaveDeviceNum_static(void *arg,uint32_t num_uint)
+    {
+      DeviceNo *device_no = (DeviceNo *)arg;
+      device_no->save_device_num_uint(num_uint);
     }
   private:
     Preferences _preferences_device_no;

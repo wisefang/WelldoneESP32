@@ -8,12 +8,9 @@
  ***********************************************************/
 #ifndef __WELLDONE_ESP32_H__
 #define __WELLDONE_ESP32_H__
-#include "HttpOTA.h"
+#include "01HttpOTA.h"
 #include "WdReset.h"
-#include "DeviceNo.h"
-#include "WdJson.h"
-#include "WdWifi.h"
-#include "WdTCP.h"
+#include "01WdWifi.h"
 class WelldoneEsp32:public HttpOTA,public Reset,public WdWifi
 {
     public:

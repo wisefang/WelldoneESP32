@@ -6,8 +6,8 @@
  * @date    2024-08-24
  * 
  ***********************************************************/
-#ifndef __HTTP_OTA_H__
-#define __HTTP_OTA_H__
+#ifndef __01_HTTP_OTA_H__
+#define __01_HTTP_OTA_H__
 #include <Arduino.h>
 #include <HTTPUpdate.h>
 class HttpOTA
