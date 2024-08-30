@@ -5,12 +5,14 @@
 #include "06DeviceNo.h"
 #include "06WdWifiSet.h"
 #include "06BuildTime.h"
+#include "06HttpOTA.h"
+#include "06WdReset.h"
 #include "AsyncTCP.h"
 // 回调函数类型定义
 
 typedef void (*CommandCallback_com)(const JsonObject&,HardwareSerial*);
 typedef void (*CommandCallback_tcp)(const JsonObject&,AsyncClient*);
-class WdJson:public DeviceNo,public WdWifiSet,public BuildTime
+class WdJson:public DeviceNo,public WdWifiSet,public BuildTime,public HttpOTA,public WdReset
 {
   public:
     WdJson():_onOtherCMDCallback_com(nullptr), _onOtherCMDCallback_tcp(nullptr){};

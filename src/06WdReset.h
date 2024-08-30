@@ -7,19 +7,19 @@
  * 
  * 
  ***********************************************************/
-#ifndef __WD_RESET_H__
-#define __WD_RESET_H__
+#ifndef __06WD_RESET_H__
+#define __06WD_RESET_H__
 #include <Arduino.h>
-class Reset
+class WdReset
 {
   public:
-    Reset():_resetDelayTime_ms(2000){}
+    WdReset():_resetDelayTime_ms(2000){}
     //ESP32 reset,Default 2000ms,reset(uint32_t resetDelayTime_ms) 
-    void reset() {
+    void wdreset() {
       _resetDelayTime_ms = 2000;//default 2s
       _begin();
     }
-    void reset(uint32_t resetDelayTime_ms){
+    void wdreset(uint32_t resetDelayTime_ms){
       _resetDelayTime_ms = resetDelayTime_ms;//set reset delay time
       _begin();
     }
@@ -30,7 +30,7 @@ class Reset
     }
     static void taskFunction(void* pvParameters) 
     {
-        Reset* taskInstance = static_cast<Reset*>(pvParameters);
+        WdReset* taskInstance = static_cast<WdReset*>(pvParameters);
         taskInstance->_delay_reset(pvParameters);
     }
   private:

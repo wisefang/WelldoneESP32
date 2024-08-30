@@ -20,7 +20,7 @@ class DeviceNo
     uint32_t get_device_num_uint(void){
       return _device_num_uint;
     }
-    void save_device_num_uint(uint32_t num_uint)    {
+    void save_serial_no(uint32_t num_uint)    {
       _preferences_device_no.begin("Device_no");
       _device_num_uint = num_uint;
       //_device_num_uint>=10000 ,_device_num_uint=1
@@ -34,7 +34,7 @@ class DeviceNo
   static void SaveDeviceNum_static(void *arg,uint32_t num_uint)
     {
       DeviceNo *device_no = (DeviceNo *)arg;
-      device_no->save_device_num_uint(num_uint);
+      device_no->save_serial_no(num_uint);
     }
   private:
     Preferences _preferences_device_no;

@@ -50,8 +50,8 @@ void setup() {
   
 if(0)//code not to be executed,only for examples
 {
-  WdESP32.reset();//esp32 will reset after 2000ms
-  WdESP32.reset(2500);//esp32 will reset after 2500ms
+  WdESP32.wdreset();//esp32 will reset after 2000ms
+  WdESP32.wdreset(2500);//esp32 will reset after 2500ms
   WdESP32.httpOTA("http://192.168.1.100:8080/update/firmware.bin");//update firmware from http
 }
   rtc_wdt_protect_off();     //看门狗写保护关闭 关闭后可以喂狗

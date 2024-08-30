@@ -76,27 +76,39 @@ void WdJson::_deserial_string(String jsonString,HardwareSerial* com)
  * @param json 
  * @return String 
  ***********************************************************/
-String WdJson::_handleGeneralCommand(const JsonObject& json)
-{
+String WdJson::_handleGeneralCommand(const JsonObject& json){
   String _return_str = "";
   if (json.containsKey("CmdCode")) {
     String command = json["CmdCode"].as<String>();
     if (command == "SETUP") {
-      if (json.containsKey("Body") && json["Body"].containsKey("SSID") && json["Body"].containsKey("PWD")) {
-        String ssid = json["Body"]["SSID"].as<String>();
-        String pwd = json["Body"]["PWD"].as<String>();
-        save_wifi_set(ssid, pwd);
-        _return_str = getJsonString("SETUP","OK");                                                    
-      }
-    } else if (command == "noset") {
-      Serial.println("Handling noset command");
-    }
-    else{//其他命令
-      _return_str = "OtherCmd";
-    } 
-  }
-  else{//其他命令
-    _return_str = "OtherCmd";
-  }
+      if (json.containsKey("Body")) {
+        //wifi setup
+        if (json["Body"].containsKey("SSID") && json["Body"].containsKey("PWD")) {
+          String ssid = json["Body"]["SSID"].as<String>();
+          String pwd = json["Body"]["PWD"].as<String>();
+          save_wifi_set(ssid, pwd);
+          _return_str = getJsonString("SETUP", "OK");
+        }
+        //SerialNo setup
+        else if (json["Body"].containsKey("SerialNo")) {  
+          uint32_t serialNo = json["Body"]["SerialNo"].as<uint32_t>();
+          save_serial_no(serialNo);
+          _return_str = getJsonString("SETUP", "OK");
+        } 
+        //HttpOTA
+        else if (json["Body"].containsKey("HttpOTA")) {
+          String url = json["Body"]["HttpOTA"].as<String>();
+          httpOTA(url);
+          _return_str = getJsonString("SETUP", "OK");
+        }
+        //rest
+        else if (json["Body"].containsKey("Reset")) {
+          uint32_t rest_delayms = json["Body"]["Reset"].as<uint32_t>();
+          wdreset(rest_delayms);
+          _return_str = getJsonString("SETUP", "OK");
+        } else{ _return_str = "OtherCmd";}
+      } else{ _return_str = "OtherCmd";} 
+    } else{ _return_str = "OtherCmd";}
+  } else{ _return_str = "OtherCmd";}
   return _return_str;
 }

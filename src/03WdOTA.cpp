@@ -64,7 +64,7 @@ void WdOTA::Config_Callback(AsyncWebServerRequest *request)
     uint32_t HTTP_value = request->getParam("DeviceNo")->value().toInt();    // 获取下发的数据
     Serial.print("Receive DeviceNo: ");
     Serial.println(HTTP_value);
-    _instance_wdota->save_device_num_uint(HTTP_value);
+    _instance_wdota->save_serial_no(HTTP_value);
   }
   request->send(200, "text/plain", "OK"); // 发送接收成功标志符
 }

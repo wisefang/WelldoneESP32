@@ -8,10 +8,8 @@
  ***********************************************************/
 #ifndef __WELLDONE_ESP32_H__
 #define __WELLDONE_ESP32_H__
-#include "01HttpOTA.h"
-#include "WdReset.h"
 #include "01WdWifi.h"
-class WelldoneEsp32:public HttpOTA,public Reset,public WdWifi
+class WelldoneEsp32:public WdWifi
 {
     public:
         // 定义回调函数类型
