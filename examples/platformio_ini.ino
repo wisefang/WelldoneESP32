@@ -1,0 +1,78 @@
+; PlatformIO Project Configuration File
+;
+;   Build options: build flags, source filter
+;   Upload options: custom upload port, speed and extra flags
+;   Library options: dependencies, extra library storages
+;   Advanced options: extra scripting
+;
+; Please visit documentation for the other options and examples
+; https://docs.platformio.org/page/projectconf.html
+
+[platformio]
+default_envs = Wdlib_test
+[WelldoneESP32]
+	build_flags =
+		; define WelldoneESP32 specific build flags here
+		; define Serial baud rate,not defined default is 115200
+		-D SerialBaudRate=115200
+		; define use or not wifi,default is true
+		-D UseWifi=true
+		; WifiMode, 1=WIFI_STA or 2=WIFI_AP,default is 1WIFI_STA,
+		-D WifiMode=1
+		; define default wifi ssid and password
+		'-D StationSsid="MYJXF3"'
+		'-D StationPwd="1234567890"'
+		'-D ApSsid="Welldone"'
+		'-D ApPwd=""'
+		'-D WdHostName="WdEsp32"'
+		; define use or not tcp client,default is true
+		-D UseTcpClient=true
+		'-D RemoteIP="192.168.16.222"'
+		-D RemotePort=1234
+		; define use or not tcp server,default is true
+		-D UseTcpServer=true
+		-D LocalPort=5001
+[common]
+build_flags = 
+	-DCORE_DEBUG_LEVEL=ARDUHAL_LOG_LEVEL_INFO
+	-DCURRENT_TIME=$UNIX_TIME
+[env]
+platform = espressif32
+board = esp32dev
+framework = arduino
+board_build.mcu = esp32
+board_build.f_cpu = 240000000L
+board_build.f_flash = 80000000L
+board_build.flash_mode = qio
+board_build.filesystem = littlefs
+board_build.partitions = min_spiffs.csv
+upload_protocol = esptool
+upload_port = COM3
+upload_speed = 921600
+monitor_speed = 115200
+lib_ldf_mode = deep
+
+[env:Wdlib_test]
+build_flags = 
+	${WelldoneESP32.build_flags}
+	${common.build_flags}
+	'-D Device_Name="JFJZ"'
+	'-D ChineseName="局放校准器"'
+	-D ELEGANTOTA_USE_ASYNC_WEBSERVER=1
+	-DVERSION=${this.custom_prog_version}
+	-DSoftVERSION=${this.custom_soft_version}
+	'-D HardwareVer="${this.custom_prog_version}"'
+	'-D SoftwareVer="${this.custom_soft_version}"'
+extra_scripts = pre:extra_script.py
+custom_prog_version = Wdlib_test
+custom_soft_version = V1.0.5
+build_src_filter = 
+	+<../src/*.cpp>
+
+lib_deps = 
+	bblanchon/ArduinoJson@^7.1.0
+	ayushsharma82/ElegantOTA@^3.1.5
+	paulstoffregen/Time@^1.6.1
+	jchristensen/Timezone@^1.2.4
+  wisefang/WelldoneESP32 @ ^1.0.7
+
