@@ -33,6 +33,7 @@ default_envs = Wdlib_test
 		-D UseTcpServer=true
 		-D LocalPort=5001
 [common]
+custom_soft_version = V1.0.5
 build_flags = 
 	-DCORE_DEBUG_LEVEL=ARDUHAL_LOG_LEVEL_INFO
 	-DCURRENT_TIME=$UNIX_TIME
@@ -65,7 +66,7 @@ build_flags =
 	'-D SoftwareVer="${this.custom_soft_version}"'
 extra_scripts = pre:extra_script.py
 custom_prog_version = Wdlib_test
-custom_soft_version = V1.0.5
+custom_soft_version = ${common.custom_soft_version}
 build_src_filter = 
 	+<../src/*.cpp>
 
