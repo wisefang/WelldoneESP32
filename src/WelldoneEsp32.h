@@ -12,14 +12,14 @@
 class WelldoneEsp32:public WdWifi
 {
     public:
+        WelldoneEsp32();
+        ~WelldoneEsp32();
         // 定义回调函数类型
         typedef void (*CallbackFunction_onSerialReceive)(const String&);
-        void init(void){
-            Serial.setTimeout(50);
-            Serial.begin(115200);
-            device_no_init();
-            wifi_begin();
-            
+        void init(void);
+        void begin(void){
+            init();
+                      
             xTaskCreate(taskFunction, "uart_receive_Task", 8*1024, this, 2, &_taskHandle);
         }
         static void taskFunction(void* pvParameters) {
@@ -32,6 +32,7 @@ class WelldoneEsp32:public WdWifi
     private:
         TaskHandle_t _taskHandle = NULL; 
         CallbackFunction_onSerialReceive _callback;
+        uint32_t _serial_baud_rate; // 串口波特率
     private:
         void _serial_receive_process(void *pvParameters){
             HardwareSerial* com[3] = {&Serial, &Serial1 , &Serial2};

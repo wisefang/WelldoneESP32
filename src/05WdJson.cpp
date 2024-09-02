@@ -86,8 +86,11 @@ String WdJson::_handleGeneralCommand(const JsonObject& json){
         if (json["Body"].containsKey("SSID") && json["Body"].containsKey("PWD")) {
           String ssid = json["Body"]["SSID"].as<String>();
           String pwd = json["Body"]["PWD"].as<String>();
-          save_wifi_set(ssid, pwd);
-          _return_str = getJsonString("SETUP", "OK");
+          if(save_station_setting(ssid, pwd)){
+            _return_str = getJsonString("SETUP", "OK");
+          } else{
+            _return_str = getJsonString("SETUP", "FAIL_SSID_PWD");
+          }          
         }
         //SerialNo setup
         else if (json["Body"].containsKey("SerialNo")) {  

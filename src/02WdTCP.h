@@ -11,12 +11,18 @@ const static int REMOTE_TCP_SERVER_PORT = 1234;
 class WdTCP: public WdOTA
 {
   public:
+    WdTCP();
     void as_client_begin(IPAddress ip, uint16_t port);
+    void as_client_begin(void);
     void as_server_begin(uint16_t port);
+    void as_server_begin(void);
   private:
     AsyncClient* _esp32_as_client;
     AsyncServer* _esp32_as_server;
-    TaskHandle_t _taskHandle = NULL;    
+    TaskHandle_t _taskHandle = NULL;
+    uint16_t _local_port;
+    uint16_t _remote_port;   
+    IPAddress _remote_ip;
   private:
     static void asClient_OnConnected(void* arg, AsyncClient* client);
     static void asClient_OnDisconnected(void* arg, AsyncClient* client);

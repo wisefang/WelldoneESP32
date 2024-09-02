@@ -13,7 +13,6 @@
 class HttpOTA
 {
   public:
-    //HttpOTA(String ota_url)
     void httpOTA(String ota_url);
   private:
     String _ota_url;

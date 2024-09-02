@@ -3,21 +3,33 @@
 #include "ESPAsyncWebServer.h"
 
 AsyncWebServer server(80);
-const char *hostname = "WdEsp32";
+
 WdOTA* WdOTA::_instance_wdota = NULL;
+/**********************************************************
+ * @brief Construct a new Wd O T A:: Wd O T A object
+ * 
+ ***********************************************************/
+WdOTA::WdOTA() {
+  _instance_wdota = this;
+#ifdef WdHostName
+  _host_name = WdHostName;
+#else
+  _host_name = "WdEsp32";
+#endif
+}
 /**********************************************************
  * @brief otaBegin
  * 
  ***********************************************************/
 void WdOTA::otaBegin() {
-  if (!MDNS.begin(hostname)) {
-    Serial.println("Error setting up mDNS responder!");
+  if (!MDNS.begin(_host_name)) {
+    log_e("Error setting up mDNS responder!");
   } else {
-    Serial.printf("Access at http://%s.local\n", hostname);
+    Serial.printf("Access at http://%s.local\n", _host_name);
   }
   server.on("/", HTTP_GET, [this](AsyncWebServerRequest *request) {
     String index = index_html;
-    index.replace ("%web_title%", hostname);
+    index.replace ("%web_title%", _host_name);
     index.replace("%deviceNo%", get_device_no());
     index.replace("%ChineseName%", ChineseName);
     index.replace("%SoftwareVer%",SoftwareVer);

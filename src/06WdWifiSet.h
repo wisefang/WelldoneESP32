@@ -5,34 +5,26 @@
 class WdWifiSet
 {
   public:
-    void save_wifi_set(String ssid, String pwd){
-      _preferences_wifiset.begin("WdWifiSet");
-      _preferences_wifiset.putString("wifi_ssid", ssid);
-      _preferences_wifiset.putString("wifi_pwd", pwd);
-      _wifi_ssid = _preferences_wifiset.getString("wifi_ssid", "MYJ");
-      _wifi_pwd = _preferences_wifiset.getString("wifi_pwd", "123456");
-      _preferences_wifiset.end();
-      log_i("wifi set saved");
-      log_i("wifi ssid: %s", _wifi_ssid.c_str());
-      log_i("wifi pwd: %s", _wifi_pwd.c_str());
-
-    }
-    String get_wifi_ssid(void){
-      _preferences_wifiset.begin("WdWifiSet",true);
-      String ssid = _preferences_wifiset.getString("wifi_ssid", "MYJXF2");
-      _preferences_wifiset.end();
-      return ssid;
-    }
-    String get_wifi_pwd(void){
-      _preferences_wifiset.begin("WdWifiSet",true);
-      String pwd = _preferences_wifiset.getString("wifi_pwd", "1234567890");
-      _preferences_wifiset.end();
-      return pwd;
-    }
+    WdWifiSet();
+    ~WdWifiSet();
+    String get_station_ssid();
+    String get_station_pwd();
+    String get_ap_ssid();
+    String get_ap_pwd();
+    bool save_station_setting(String ssid, String pwd);
+    bool save_ap_setting(String ssid, String pwd);  
+    
   private:
     Preferences _preferences_wifiset;
     String _wifi_ssid;
     String _wifi_pwd;
+    String _default_station_ssid;
+    String _default_station_pwd;
+    String _default_ap_ssid;
+    String _default_ap_pwd;
+  private:
+    String _get_wifi_setting(const char* key, String default_value);
+    bool _set_wifi_setting(const char* key, String value);
 
 };
 

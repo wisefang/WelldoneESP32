@@ -4,7 +4,7 @@
 
 void handleOtherCommand_com(const JsonObject& json,HardwareSerial* com) {
     com->println("Handling other command fro com:");
-    serializeJson(json, Serial);
+    
 }
 
 void handleOtherCommand_tcp(const JsonObject& json,AsyncClient* client) {
@@ -39,4 +39,3 @@ void loop() {
   rtc_wdt_feed();
   delay(1000);
 }
-

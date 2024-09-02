@@ -9,6 +9,29 @@ static AsyncClient* esp_client = new AsyncClient;
 static bool asClient_isConnected ;
 static bool asServer_hasClient;
 /**********************************************************
+ * @brief Construct a new Wd T C P:: Wd T C P object
+ * 
+ ***********************************************************/
+WdTCP::WdTCP(){
+#ifdef RomotePort
+  _remote_port = RomotePort;
+#else
+  _remote_port = 1234;
+#endif
+#ifdef RemoteIP
+  if(_remote_ip.fromString(RemoteIP) == false){
+    _remote_ip = IPAddress(192, 168, 1, 1);
+  }  
+#else
+  _remote_ip = IPAddress(192, 168, 1, 1);
+#endif
+#ifdef LocalPort
+  _local_port = LocalPort;
+#else
+  _local_port = 1234;
+#endif
+}
+/**********************************************************
  * @brief as_client_begin
  * 
  * @param ip 
@@ -16,13 +39,18 @@ static bool asServer_hasClient;
  ***********************************************************/
 void WdTCP::as_client_begin(IPAddress ip, uint16_t port)
 {  
-  log_i("client begin %s on port %d \n", "HDDAC", REMOTE_TCP_SERVER_PORT);
+  log_i("client begin %s on port %d \n",ip.toString().c_str(), port);
   _esp32_as_client= new AsyncClient;
   _esp32_as_client->onData(&asClient_OnData, this);
 	_esp32_as_client->onConnect(&asClient_OnConnected, _esp32_as_client);
   _esp32_as_client->onDisconnect(&asClient_OnDisconnected, _esp32_as_client);
-	_esp32_as_client->connect(serverIP, REMOTE_TCP_SERVER_PORT);
+	_esp32_as_client->connect(serverIP, port);
   _esp32_as_client->close();
+}
+
+void WdTCP::as_client_begin(void)
+{  
+  as_client_begin(_remote_ip, _remote_port);
 }
 /**********************************************************
  * @brief as_server_begin
@@ -35,6 +63,11 @@ void WdTCP::as_server_begin(uint16_t port)
   _esp32_as_server = new AsyncServer(port);
   _esp32_as_server->onClient(&asServer_OnClient, this);
   _esp32_as_server->begin();
+}
+
+void WdTCP::as_server_begin(void)
+{
+  as_server_begin(_local_port);
 }
 /**********************************************************
  * @brief asyncClient OnConnected
