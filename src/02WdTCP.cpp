@@ -110,7 +110,7 @@ void WdTCP::_asClientOnData(AsyncClient* client, void* data, size_t len)
     log_e("Client is null");
     return;
   }
-  if(len > 10)//if data is more than 10 bytes, it is a command
+  if(len >= min_command_length)//if data is more than 10 bytes, it is a command
   {
     String data_from_server(static_cast<char*>(data)); 
     parseJsonString(data_from_server,client); // handle the command
@@ -163,7 +163,7 @@ void WdTCP::_asServerOnData(AsyncClient *client, void *data, size_t len)
     log_e("Client is null");
     return;
   }
-  if (len > 10)//
+  if (len >= min_command_length)
   {
     String data_from_client(static_cast<char*>(data));
     parseJsonString(data_from_client,client); // handle the command

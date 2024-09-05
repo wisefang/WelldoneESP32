@@ -34,16 +34,24 @@ class WelldoneEsp32:public WdWifi
         CallbackFunction_onSerialReceive _callback;
         uint32_t _serial_baud_rate; // 串口波特率
     private:
-        void _serial_receive_process(void *pvParameters){
-            HardwareSerial* com[3] = {&Serial, &Serial1 , &Serial2};
-            for(;;){
-                for(int i = 0; i < 3; i++){
+        void _serial_receive_process(void *pvParameters) {
+            HardwareSerial* com[3] = {&Serial, &Serial1, &Serial2};
+            for (;;) {
+                for (int i = 0; i < 3; i++) {
                     if (com[i]->available() > 0) {
-                        String data = com[i]->readStringUntil('\n');
-                        parseJsonString(data,com[i]);                        
+                        char buffer[256];                        
+                        // 确保读取不会超出缓冲区大小
+                        int bytesRead = com[i]->readBytesUntil('\n', buffer, sizeof(buffer));
+                        if ((bytesRead >= min_command_length) && (bytesRead <= 255)) {
+                            String data(buffer);                            
+                            parseJsonString(data, com[i]);                                
+                        } else {
+                            // 命令字符串太短或太长
+                            log_e("Invalid command length: %d", bytesRead);
+                        }
                     }
                 }
-                vTaskDelay(50 / portTICK_PERIOD_MS);                
+                vTaskDelay(50 / portTICK_PERIOD_MS);
             }
         }
 };

@@ -9,7 +9,7 @@
 ; https://docs.platformio.org/page/projectconf.html
 
 [platformio]
-default_envs = Wdlib_test
+default_envs = welldoneesp32
 [WelldoneESP32]
 	build_flags =
 		; define WelldoneESP32 specific build flags here
@@ -33,10 +33,13 @@ default_envs = Wdlib_test
 		-D UseTcpServer=true
 		-D LocalPort=5001
 [common]
-custom_soft_version = V1.0.5
+custom_soft_version = V1.0.9
 build_flags = 
 	-DCORE_DEBUG_LEVEL=ARDUHAL_LOG_LEVEL_INFO
 	-DCURRENT_TIME=$UNIX_TIME
+	-Iexample/
+	-Isrc/
+
 [env]
 platform = espressif32
 board = esp32dev
@@ -48,12 +51,12 @@ board_build.flash_mode = qio
 board_build.filesystem = littlefs
 board_build.partitions = min_spiffs.csv
 upload_protocol = esptool
-upload_port = COM3
+upload_port = COM8
 upload_speed = 921600
 monitor_speed = 115200
 lib_ldf_mode = deep
 
-[env:Wdlib_test]
+[env:welldoneesp32]
 build_flags = 
 	${WelldoneESP32.build_flags}
 	${common.build_flags}
@@ -65,15 +68,13 @@ build_flags =
 	'-D HardwareVer="${this.custom_prog_version}"'
 	'-D SoftwareVer="${this.custom_soft_version}"'
 extra_scripts = pre:extra_script.py
-custom_prog_version = Wdlib_test
+custom_prog_version = welldoneesp32
 custom_soft_version = ${common.custom_soft_version}
 build_src_filter = 
 	+<../src/*.cpp>
-
+	+<../examples/*.cpp>
 lib_deps = 
 	bblanchon/ArduinoJson@^7.1.0
 	ayushsharma82/ElegantOTA@^3.1.5
 	paulstoffregen/Time@^1.6.1
 	jchristensen/Timezone@^1.2.4
-  wisefang/WelldoneESP32 @ ^1.0.7
-

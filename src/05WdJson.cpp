@@ -77,41 +77,49 @@ void WdJson::_deserial_string(String jsonString,HardwareSerial* com)
  * @return String 
  ***********************************************************/
 String WdJson::_handleGeneralCommand(const JsonObject& json){
-  String _return_str = "";
-  if (json.containsKey("CmdCode")) {
-    String command = json["CmdCode"].as<String>();
-    if (command == "SETUP") {
-      if (json.containsKey("Body")) {
-        //wifi setup
-        if (json["Body"].containsKey("SSID") && json["Body"].containsKey("PWD")) {
-          String ssid = json["Body"]["SSID"].as<String>();
-          String pwd = json["Body"]["PWD"].as<String>();
-          if(save_station_setting(ssid, pwd)){
-            _return_str = getJsonString("SETUP", "OK");
-          } else{
-            _return_str = getJsonString("SETUP", "FAIL_SSID_PWD");
-          }          
-        }
-        //SerialNo setup
-        else if (json["Body"].containsKey("SerialNo")) {  
-          uint32_t serialNo = json["Body"]["SerialNo"].as<uint32_t>();
-          save_serial_no(serialNo);
-          _return_str = getJsonString("SETUP", "OK");
-        } 
-        //HttpOTA
-        else if (json["Body"].containsKey("HttpOTA")) {
-          String url = json["Body"]["HttpOTA"].as<String>();
-          httpOTA(url);
-          _return_str = getJsonString("SETUP", "OK");
-        }
-        //rest
-        else if (json["Body"].containsKey("Reset")) {
-          uint32_t rest_delayms = json["Body"]["Reset"].as<uint32_t>();
-          wdreset(rest_delayms);
-          _return_str = getJsonString("SETUP", "OK");
-        } else{ _return_str = "OtherCmd";}
-      } else{ _return_str = "OtherCmd";} 
-    } else{ _return_str = "OtherCmd";}
-  } else{ _return_str = "OtherCmd";}
+  String _return_str = CMD_OTHER;
+
+  if (!json.containsKey("CmdCode")) {
+    return _return_str;
+  }
+
+  String command = json["CmdCode"].as<String>();
+  if (command != CMD_SETUP) {
+    return _return_str;
+  }
+
+  if (!json.containsKey("Body")) {
+    return _return_str;
+  }
+
+  const JsonObject& body = json["Body"];
+
+  if (body.containsKey("SSID") && body.containsKey("PWD")) {
+    String ssid = body["SSID"].as<String>();
+    String pwd = body["PWD"].as<String>();
+    if (save_station_setting(ssid, pwd)) {
+      _return_str = getJsonString(CMD_SETUP, CMD_OK);
+    } else {
+      _return_str = getJsonString(CMD_SETUP, CMD_FAIL_SSID_PWD);
+    }
+  } else if (body.containsKey("SerialNo")) {
+    if (!body["SerialNo"].is<uint32_t>()) {
+      return getJsonString(CMD_SETUP, "INVALID_SERIALNO");
+    }
+    uint32_t serialNo = body["SerialNo"].as<uint32_t>();
+    save_serial_no(serialNo);
+    _return_str = getJsonString(CMD_SETUP, CMD_OK);
+  } else if (body.containsKey("HttpOTA")) {
+    String url = body["HttpOTA"].as<String>();
+    httpOTA(url);
+    _return_str = getJsonString(CMD_SETUP, CMD_OK);
+  } else if (body.containsKey("Reset")) {
+    if (!body["Reset"].is<uint32_t>()) {
+      return getJsonString(CMD_SETUP, "INVALID_RESET_DELAY");
+    }
+    uint32_t rest_delayms = body["Reset"].as<uint32_t>();
+    wdreset(rest_delayms);
+    _return_str = getJsonString(CMD_SETUP, CMD_OK);
+  }
   return _return_str;
 }

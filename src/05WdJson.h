@@ -56,7 +56,10 @@ class WdJson:public DeviceNo,public WdWifiSet,public BuildTime,public HttpOTA,pu
   private:
     CommandCallback_com _onOtherCMDCallback_com;
     CommandCallback_tcp _onOtherCMDCallback_tcp; 
-    
+    const char* CMD_SETUP = "SETUP";
+    const char* CMD_OK = "OK";
+    const char* CMD_FAIL_SSID_PWD = "FAIL_SSID_PWD";
+    const char* CMD_OTHER = "OtherCmd";
   private:
     void _deserial_string(String jsonString,AsyncClient* client);
     void _deserial_string(String jsonString,HardwareSerial* com);

@@ -8,6 +8,7 @@
 const static IPAddress serverIP(192,168,16,222);
 const static int LOCAL_TCP_SERVER_PORT = 1234;
 const static int REMOTE_TCP_SERVER_PORT = 1234;
+const size_t min_command_length = 4;
 class WdTCP: public WdOTA
 {
   public:
