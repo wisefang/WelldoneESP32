@@ -86,9 +86,9 @@ String WdJson::_handleGeneralCommand(const JsonObject& json){
   const JsonObject& body = json["Body"];
   const char* ssid = body["SSID"];
   const char* pwd  = body["PWD"];
-  uint32_t serialNo = body["SerialNo"].as<uint32_t>();
+  
   const char* url = body["HttpOTA"];
-  uint32_t rest_delayms = body["Reset"].as<uint32_t>();
+  
   if (ssid && pwd) {
     log_i("ssid:%s, pwd:%s",ssid,pwd);
     if (save_station_setting(ssid, pwd)) {
@@ -96,15 +96,17 @@ String WdJson::_handleGeneralCommand(const JsonObject& json){
     } else {
       _return_str = getJsonString(CMD_SETUP, CMD_FAIL_SSID_PWD);
     }
-  } else if (serialNo) { 
-    log_i("serialNo:%d", serialNo);   
-    save_serial_no(serialNo);
-    _return_str = getJsonString(CMD_SETUP, CMD_OK);
   } else if (url) {   
     log_i("url:%s", url); 
     httpOTA(url);
     _return_str = getJsonString(CMD_SETUP, CMD_OK);
-  } else if (rest_delayms) {     
+  } else if (body["SerialNo"].is<uint32_t>()) { 
+    uint32_t serialNo = body["SerialNo"].as<uint32_t>();
+    log_i("serialNo:%d", serialNo);   
+    save_serial_no(serialNo);
+    _return_str = getJsonString(CMD_SETUP, CMD_OK);
+  }  else if (body["Reset"].is<uint32_t>()) { 
+    uint32_t rest_delayms = body["Reset"].as<uint32_t>();    
     log_i("rest_delayms:%d", rest_delayms);
     wdreset(rest_delayms);
     _return_str = getJsonString(CMD_SETUP, CMD_OK);
