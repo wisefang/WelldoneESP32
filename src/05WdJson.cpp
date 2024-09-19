@@ -57,8 +57,7 @@ void WdJson::_deserial_string(String jsonString,HardwareSerial* com)
   }else{
     JsonObject json = doc.as<JsonObject>();
     String CmdReturn=_handleGeneralCommand(json);
-    log_i("CmdReturn: %s", CmdReturn.c_str());
-    if (CmdReturn == "OtherCmd"){
+    if (CmdReturn == CMD_OTHER){
       if (_onOtherCMDCallback_com) {
         _onOtherCMDCallback_com(json, com);
       } else {
@@ -78,46 +77,35 @@ void WdJson::_deserial_string(String jsonString,HardwareSerial* com)
  ***********************************************************/
 String WdJson::_handleGeneralCommand(const JsonObject& json){
   String _return_str = CMD_OTHER;
-
-  if (!json.containsKey("CmdCode")) {
-    return _return_str;
-  }
-
+  
   String command = json["CmdCode"].as<String>();
   if (command != CMD_SETUP) {
     return _return_str;
   }
-
-  if (!json.containsKey("Body")) {
-    return _return_str;
-  }
-
+  
   const JsonObject& body = json["Body"];
-
-  if (body.containsKey("SSID") && body.containsKey("PWD")) {
-    String ssid = body["SSID"].as<String>();
-    String pwd = body["PWD"].as<String>();
+  const char* ssid = body["SSID"];
+  const char* pwd  = body["PWD"];
+  uint32_t serialNo = body["SerialNo"].as<uint32_t>();
+  const char* url = body["HttpOTA"];
+  uint32_t rest_delayms = body["Reset"].as<uint32_t>();
+  if (ssid && pwd) {
+    log_i("ssid:%s, pwd:%s",ssid,pwd);
     if (save_station_setting(ssid, pwd)) {
       _return_str = getJsonString(CMD_SETUP, CMD_OK);
     } else {
       _return_str = getJsonString(CMD_SETUP, CMD_FAIL_SSID_PWD);
     }
-  } else if (body.containsKey("SerialNo")) {
-    if (!body["SerialNo"].is<uint32_t>()) {
-      return getJsonString(CMD_SETUP, "INVALID_SERIALNO");
-    }
-    uint32_t serialNo = body["SerialNo"].as<uint32_t>();
+  } else if (serialNo) { 
+    log_i("serialNo:%d", serialNo);   
     save_serial_no(serialNo);
     _return_str = getJsonString(CMD_SETUP, CMD_OK);
-  } else if (body.containsKey("HttpOTA")) {
-    String url = body["HttpOTA"].as<String>();
+  } else if (url) {   
+    log_i("url:%s", url); 
     httpOTA(url);
     _return_str = getJsonString(CMD_SETUP, CMD_OK);
-  } else if (body.containsKey("Reset")) {
-    if (!body["Reset"].is<uint32_t>()) {
-      return getJsonString(CMD_SETUP, "INVALID_RESET_DELAY");
-    }
-    uint32_t rest_delayms = body["Reset"].as<uint32_t>();
+  } else if (rest_delayms) {     
+    log_i("rest_delayms:%d", rest_delayms);
     wdreset(rest_delayms);
     _return_str = getJsonString(CMD_SETUP, CMD_OK);
   }
