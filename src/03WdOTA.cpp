@@ -45,9 +45,8 @@ void WdOTA::otaBegin() {
     request->send(200, "text/plain", MergeData("No").c_str()); 
   });
   server.on("/set", HTTP_GET, Config_Callback);   // 绑定配置下发的处理函数
-  ElegantOTA.setAutoReboot(true);    // Enable auto reboot after upload
   ElegantOTA.begin(&server, "admin", "12345");    // Start ElegantOTA
-  // ElegantOTA callbacks
+  ElegantOTA.setAutoReboot(true);    // Enable auto reboot after upload// ElegantOTA callbacks
   // ElegantOTA.onStart(onOTAStart);
   // ElegantOTA.onProgress(onOTAProgress);
   // ElegantOTA.onEnd(onOTAEnd);
