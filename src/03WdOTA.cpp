@@ -64,6 +64,8 @@ void WdOTA::onOTAEnd(bool success) {
   if (success) {
     //重启 
     Serial.println("OTA has finished successfully.");
+    Serial.println("Rebooting...");
+    delay(2000);
     ESP.restart();
   } else {
     Serial.println("There was an error during OTA update!");
