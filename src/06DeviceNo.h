@@ -39,6 +39,7 @@ class DeviceNo
   private:
     Preferences _preferences_device_no;
     uint32_t _device_num_uint;
+  public:  
     String _device_no;//设备序列号，序号前加JFJZ
   public:
     void device_no_init(void){
