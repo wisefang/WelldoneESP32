@@ -2,8 +2,8 @@
 #define __06BUILD_TIME_H__
 
 #include <Arduino.h>
-#include <TimeLib.h>
-#include <Timezone.h>
+#include "../src/lib/Time/TimeLib.h" // 引入时间库
+#include "../src/lib/Timezone/src/Timezone.h" // 引入时区库
 class BuildTime
 {
   public:
