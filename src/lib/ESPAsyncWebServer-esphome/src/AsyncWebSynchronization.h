@@ -3,7 +3,7 @@
 
 // Synchronisation is only available on ESP32, as the ESP8266 isn't using FreeRTOS by default
 
-#include <ESPAsyncWebServer.h>
+#include "ESPAsyncWebServer.h"
 
 #if defined(ESP32) || (defined(LIBRETINY) && LT_HAS_FREERTOS)
 

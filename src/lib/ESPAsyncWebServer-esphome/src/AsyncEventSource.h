@@ -17,13 +17,13 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-#ifndef ASYNCEVENTSOURCE_H_
-#define ASYNCEVENTSOURCE_H_
+#ifndef __ASYNC_EVENT_SOURCE_H__
+#define __ASYNC_EVENT_SOURCE_H__
 
 #include <Arduino.h>
 #include <Arduino.h>
 #if defined(ESP32) || defined(LIBRETINY)
-#include <AsyncTCP.h>
+#include "../../../lib/AsyncTCP-esphome/src/AsyncTCP.h"
 #else
 #include <ESPAsyncTCP.h>
 #endif
@@ -36,7 +36,7 @@
 #define SSE_MAX_QUEUED_MESSAGES 32
 #endif
 
-#include <ESPAsyncWebServer.h>
+#include "ESPAsyncWebServer.h"
 
 #include "AsyncWebSynchronization.h"
 
@@ -153,4 +153,4 @@ class AsyncEventSourceResponse: public AsyncWebServerResponse {
 };
 
 
-#endif /* ASYNCEVENTSOURCE_H_ */
+#endif /* __ASYNC_EVENT_SOURCE_H__ */

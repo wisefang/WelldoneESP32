@@ -1,5 +1,5 @@
 #include "02WdTCP.h"
-#include <AsyncTCP.h>
+
 /**********************************************************
  * @brief static variables declaration
  * 

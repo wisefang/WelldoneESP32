@@ -13,14 +13,14 @@
     #include "FS.h"
 #elif defined(ESP32)
     #include "WiFi.h"
-    #include "AsyncTCP.h"
+    #include "../../../lib/AsyncTCP-esphome/src/AsyncTCP.h"
     #include "Update.h"
     #include "esp_int_wdt.h"
     #include "esp_task_wdt.h"
 #endif
 
 #include "Hash.h"
-#include "ESPAsyncWebServer.h"
+#include "../../../lib/ESPAsyncWebServer-esphome/src/ESPAsyncWebServer.h"
 #include "FS.h"
 
 #include "elegantWebpage.h"

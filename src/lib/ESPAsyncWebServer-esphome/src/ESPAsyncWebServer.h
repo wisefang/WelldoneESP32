@@ -30,7 +30,7 @@
 
 #if defined(ESP32) || defined(LIBRETINY)
 #include <WiFi.h>
-#include <AsyncTCP.h>
+#include "../../../lib/AsyncTCP-esphome/src/AsyncTCP.h"
 #elif defined(ESP8266)
 #include <ESP8266WiFi.h>
 #include <ESPAsyncTCP.h>

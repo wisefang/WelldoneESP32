@@ -23,7 +23,7 @@
 
 #include <Arduino.h>
 #if defined(ESP32) || defined(LIBRETINY)
-#include <AsyncTCP.h>
+#include "../../../lib/AsyncTCP-esphome/src/AsyncTCP.h"
 #ifndef WS_MAX_QUEUED_MESSAGES
 #define WS_MAX_QUEUED_MESSAGES 32
 #endif
@@ -33,7 +33,7 @@
 #define WS_MAX_QUEUED_MESSAGES 8
 #endif
 #endif
-#include <ESPAsyncWebServer.h>
+#include "ESPAsyncWebServer.h"
 
 #include "AsyncWebSynchronization.h"
 
