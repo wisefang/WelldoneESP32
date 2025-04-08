@@ -49,10 +49,26 @@ void WdOTA::otaBegin() {
   ElegantOTA.setAutoReboot(true);    // Enable auto reboot after upload// ElegantOTA callbacks
   // ElegantOTA.onStart(onOTAStart);
   // ElegantOTA.onProgress(onOTAProgress);
-  // ElegantOTA.onEnd(onOTAEnd);
+  ElegantOTA.onEnd(onOTAEnd);
 
   server.begin();  
   
+}
+/**********************************************************
+ * @brief onOTAEnd
+ * 
+ * @param success 
+ ***********************************************************/
+void WdOTA::onOTAEnd(bool success) {
+  // Log when OTA has finished
+  if (success) {
+    //重启 
+    Serial.println("OTA has finished successfully.");
+    ESP.restart();
+  } else {
+    Serial.println("There was an error during OTA update!");
+  }
+  // <Add your own code here>
 }
 /**********************************************************
  * @brief MergeData

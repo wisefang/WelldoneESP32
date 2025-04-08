@@ -12,6 +12,7 @@ class WdOTA:public Wdindex
     String MergeData(String flag);
     static void Config_Callback(AsyncWebServerRequest *request);
   private:
+    static void onOTAEnd(bool success);
     static WdOTA *_instance_wdota;
     const char *_host_name;
 };
