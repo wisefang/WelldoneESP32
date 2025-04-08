@@ -1,7 +1,8 @@
 #include "03WdOTA.h"
 #include "ESPmDNS.h"
 #include "ESPAsyncWebServer.h"
-
+// #include "../src/AsyncElegantOTA/src/AsyncElegantOTA.h"
+#include <AsyncElegantOTA.h>
 AsyncWebServer server(80);
 
 WdOTA* WdOTA::_instance_wdota = NULL;
@@ -45,11 +46,12 @@ void WdOTA::otaBegin() {
     request->send(200, "text/plain", MergeData("No").c_str()); 
   });
   server.on("/set", HTTP_GET, Config_Callback);   // 绑定配置下发的处理函数
-  ElegantOTA.begin(&server, "admin", "12345");    // Start ElegantOTA
-  ElegantOTA.setAutoReboot(true);    // Enable auto reboot after upload// ElegantOTA callbacks
+  // ElegantOTA.setAutoReboot(true); // 设置自动重启
+  // ElegantOTA.begin(&server, "admin", "12345");    // Start ElegantOTA
+  AsyncElegantOTA.begin(&server, "admin", "12345");    // Start ElegantOTA
   // ElegantOTA.onStart(onOTAStart);
   // ElegantOTA.onProgress(onOTAProgress);
-  ElegantOTA.onEnd(onOTAEnd);
+  // ElegantOTA.onEnd(onOTAEnd);
 
   server.begin();  
   
