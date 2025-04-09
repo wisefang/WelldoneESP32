@@ -36,10 +36,11 @@ class DeviceNo
       DeviceNo *device_no = (DeviceNo *)arg;
       device_no->save_serial_no(num_uint);
     }
+  public:
+    String str_drivce_no;
   private:
     Preferences _preferences_device_no;
-    uint32_t _device_num_uint;
-  public:  
+    uint32_t _device_num_uint;   
     String _device_no;//设备序列号，序号前加JFJZ
   public:
     void device_no_init(void){
@@ -51,6 +52,7 @@ class DeviceNo
         _preferences_device_no.putUInt("num_uint", _device_num_uint);
       }
       _device_no = _to_devie_no(_device_num_uint);
+      str_drivce_no = _device_no;
       _preferences_device_no.end();
     }
   private:

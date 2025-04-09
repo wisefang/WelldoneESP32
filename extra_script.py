@@ -16,5 +16,19 @@ env.Replace(PROGNAME=firmware_name)
 version_json = '{"version": "' + softversion + '"}'
 with open('version.json', 'w') as f:
     f.write(version_json)
+#打开library.properties文件,查找version，替换version为当前版本号
+
+with open('library.properties', 'r') as f:
+    lines = f.readlines()
+with open('library.properties', 'w') as f:
+    for line in lines:
+        if line.startswith('version='):
+            #去除softversion前面的"V"
+            softversion = softversion.replace("V", "")
+            #替换版本号
+            f.write(f'version={softversion}\n')
+        else:
+            f.write(line)
+    
 
 
