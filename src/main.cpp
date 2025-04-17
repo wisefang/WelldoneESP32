@@ -25,7 +25,7 @@ void setup() {
 
   WdESP32.onOtherCMD_tcp(handleOtherCommand_tcp);
   WdESP32.onOtherCMD_com(handleOtherCommand_com);
-  WdESP32.begin();  
+  WdESP32.init();  
   
 }
 void loop() {
