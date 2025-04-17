@@ -2,12 +2,14 @@
 #define __02WD_TCP_H__
 #include <Arduino.h>
 #include "../src/lib/AsyncTCP-esphome/src/AsyncTCP.h"
+#include <AsyncUDP.h>
 #include "03WdOTA.h"
 
 
 const static IPAddress serverIP(192,168,16,222);
 const static int LOCAL_TCP_SERVER_PORT = 1234;
 const static int REMOTE_TCP_SERVER_PORT = 1234;
+
 const size_t min_command_length = 4;
 class WdTCP: public WdOTA
 {
@@ -17,12 +19,17 @@ class WdTCP: public WdOTA
     void as_client_begin(void);
     void as_server_begin(uint16_t port);
     void as_server_begin(void);
+    void wdudp_log(const char* str, int value);
+    void wdudp_log(const char* str);
+  public:
+    bool wifi_isConnected;
   private:
     AsyncClient* _esp32_as_client;
     AsyncServer* _esp32_as_server;
     TaskHandle_t _taskHandle = NULL;
     uint16_t _local_port;
-    uint16_t _remote_port;   
+    uint16_t _remote_port;
+    uint16_t _udp_port;   
     IPAddress _remote_ip;
   private:
     static void asClient_OnConnected(void* arg, AsyncClient* client);

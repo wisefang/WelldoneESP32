@@ -21,7 +21,7 @@ class WdWifi:public WdTCP
         taskInstance->_wifi_status();
     }
   public:
-    bool wifi_isConnected;
+    
     bool Flag_isSet;
   private:
     static WdWifi * _instance_wdwifi;

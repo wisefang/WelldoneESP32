@@ -6,6 +6,7 @@
  ***********************************************************/
 static AsyncClient* tcp_client = new AsyncClient;
 static AsyncClient* esp_client = new AsyncClient;
+static AsyncUDP* wd_udp = new AsyncUDP;
 static bool asClient_isConnected ;
 static bool asServer_hasClient;
 /**********************************************************
@@ -30,6 +31,10 @@ WdTCP::WdTCP(){
 #else
   _local_port = 1234;
 #endif
+#if !defined  (UDP_PORT)
+#define UDP_PORT 10000
+#endif
+  _udp_port = UDP_PORT;
 }
 /**********************************************************
  * @brief as_client_begin
@@ -68,6 +73,31 @@ void WdTCP::as_server_begin(uint16_t port)
 void WdTCP::as_server_begin(void)
 {
   as_server_begin(_local_port);
+}
+/**********************************************************
+ * @brief wdudp_log
+ * 
+ * @param str 
+ * @param value 
+ ***********************************************************/
+void WdTCP::wdudp_log(const char* str, int value){
+  String str_value = String(value);
+  String str_log = String(str) + str_value;
+  log_i("%s",str_log.c_str()); 
+  if(wifi_isConnected){
+    wd_udp->broadcastTo(str_log.c_str(), _udp_port);
+  }
+}
+/**********************************************************
+ * @brief wdudp_log
+ * 
+ * @param str 
+ ***********************************************************/
+void WdTCP::wdudp_log(const char* str){
+  log_i("%s",str); 
+  if(wifi_isConnected){
+    wd_udp->broadcastTo(str, _udp_port);
+  }
 }
 /**********************************************************
  * @brief asyncClient OnConnected
