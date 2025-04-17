@@ -21,13 +21,12 @@ class WdWifi:public WdTCP
         taskInstance->_wifi_status();
     }
   public:
-    bool Flag_isConnected;
+    bool wifi_isConnected;
     bool Flag_isSet;
   private:
     static WdWifi * _instance_wdwifi;
     String _wifi_ssid;  
-    String _wifi_pwd;   
-    bool _isWifiConnected;
+    String _wifi_pwd;    
     TaskHandle_t _taskHandle = NULL;
   private:
     void _wifi_init_asStaion(void);
@@ -45,14 +44,14 @@ class WdWifi:public WdTCP
     void _wifi_status(void){
       for (;;) {
         if (WiFi.status() != WL_CONNECTED) {
-          if (_isWifiConnected) {
-            _isWifiConnected = false;
+          if (wifi_isConnected) {
+            wifi_isConnected = false;
             log_w("Disconnected from WiFi");
           }
           log_i("Connecting to %s......",_wifi_ssid);
           // WiFi.begin(_wifi_ssid.c_str(), _wifi_pwd.c_str());
-        } else if (!_isWifiConnected) {
-            _isWifiConnected = true;
+        } else if (!wifi_isConnected) {
+            wifi_isConnected = true;
             log_i("Connected to the WiFi network");
             log_i("IP Address: %s", WiFi.localIP().toString().c_str());
             // Start OTA service and TCP service

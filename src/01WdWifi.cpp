@@ -40,7 +40,7 @@ void WdWifi::_wifi_init_asStaion(){
   WiFi.begin(_wifi_ssid.c_str(), _wifi_pwd.c_str());
   log_i("try to Connect to %s ......",_wifi_ssid);
 
-  _isWifiConnected = false;
+  wifi_isConnected = false;
 }
 /**********************************************************
  * @brief wifi init as ap
@@ -67,7 +67,7 @@ void WdWifi::_wifi_init_asAP(){
   else{
     log_i("AP %s Started",_wifi_ssid);
   }  
-  _isWifiConnected = false;
+  wifi_isConnected = false;
 }
 /**********************************************************
  * @brief wifi got ip
@@ -79,7 +79,7 @@ void WdWifi::_wifi_gotIP_static(WiFiEvent_t event, WiFiEventInfo_t info){
   _instance_wdwifi->_wifi_gotIP(event,info);
 }
 void WdWifi::_wifi_gotIP(WiFiEvent_t event, WiFiEventInfo_t info){
-  _isWifiConnected = true;
+  wifi_isConnected = true;
   log_i("Connected to %s",_wifi_ssid);
   log_i("IP address: %s",WiFi.localIP().toString().c_str());
   // Start OTA service and TCP service
@@ -132,7 +132,7 @@ void WdWifi::_wifi_disconnected_static(WiFiEvent_t event, WiFiEventInfo_t info){
   _instance_wdwifi->_wifi_disconnected(event,info);
 }
 void WdWifi::_wifi_disconnected(WiFiEvent_t event, WiFiEventInfo_t info){
-  _isWifiConnected = false;
+  wifi_isConnected = false;
   log_i("try to Connect to %s ......",_wifi_ssid);
 }
 /**********************************************************
