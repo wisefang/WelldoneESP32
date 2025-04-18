@@ -13,12 +13,11 @@ void handleOtherCommand_tcp(const JsonObject& json,AsyncClient* client) {
     if(client)
     client->write("Handling other command from client");  
 }
-volatile size_t sent_bytes = 0, received_bytes = 0;
-void onReceiveFunction(const String &data) {
-  // This is a callback function that will be activated on UART RX events
-  Serial.print("Received data: ");
-    Serial.println(data);
-}
+// void onReceiveFunction(const String &data) {
+//   // This is a callback function that will be activated on UART RX events
+//   Serial.print("Received data: ");
+//     Serial.println(data);
+// }
 void setup() {
   
   // put your setup code here, to run once:

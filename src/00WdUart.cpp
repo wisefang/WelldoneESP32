@@ -9,12 +9,13 @@
  * 
  ***********************************************************/
 #include "00WdUart.h"
+
 /**********************************************************
- * @brief 00WdUart 构造函数
+ * @brief 串口参数初始化
  * 
  ***********************************************************/
-WdUart::WdUart(){
-  #ifdef Serial_BaudRate
+void WdUart::_serial_parameter_init(){
+#ifdef Serial_BaudRate
   _serial_baud_rate = Serial_BaudRate;
 #else
   _serial_baud_rate = 115200;
@@ -62,26 +63,43 @@ WdUart::WdUart(){
 #endif
   //三个串口使用情况，串口0默认使用  
   _serial_in_use[0] = true;
-#if (Use_Serial1 == true)
+#ifdef Use_Serial1
   _serial_in_use[1] = true;
 #else
   _serial_in_use[1] = false;
 #endif
-#if (Use_Serial2 == true)
+#ifdef Use_Serial2
   _serial_in_use[2] = true;
 #else
   _serial_in_use[2] = false;
 #endif  
+//   //开机发送注册信息
+#if (Serial_Send_Register == true)
+  _serial_send_register[0] = true;
+#else
+  _serial_send_register[0] = false;
+#endif
+#if (Serial1_Send_Register == true)
+  _serial_send_register[1] = true;
+#else
+  _serial_send_register[1] = false;
+#endif
+#if (Serial2_Send_Register == true)
+  _serial_send_register[2] = true;
+#else
+  _serial_send_register[2] = false;
+#endif
 }
 /**********************************************************
  * @brief 00WdUart init() 初始化
  * 
  ************************************************************/
-void WdUart::uart_init(){
+void WdUart::wduart_init(){
+  // _serial_parameter_init();
   //Serial init
   Serial.setTimeout(50);
   Serial.begin(_serial_baud_rate);
-  //Serial1 init
+  //Serial1 init 
   if (_serial_in_use[1]){
     Serial1.setTimeout(50);
     Serial1.begin(_serial1_baud_rate,_serial1_config, _serial1_rx_pin, _serial1_tx_pin);
@@ -90,6 +108,22 @@ void WdUart::uart_init(){
   if (_serial_in_use[2]){
     Serial2.setTimeout(50);
     Serial2.begin(_serial2_baud_rate,_serial2_config, _serial2_rx_pin, _serial2_tx_pin);
+  }
+}
+/**********************************************************
+ * @brief 串口注册信息发送
+ * 
+ * @param pvParameters 
+ ***********************************************************/
+void  WdUart::_serial_register_process(void *pvParameters) {
+  HardwareSerial* com[3] = {&Serial, &Serial1, &Serial2};
+  for (;;) {
+    for (int i = 0; i < 3; i++) {
+      if ((_serial_in_use[i])&&(_serial_send_register[i]) && (!isUartConnected[i])) {
+        com[i]->write(generateRegisterJsonString().c_str());
+      }
+    }
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
   }
 }
 /**********************************************************

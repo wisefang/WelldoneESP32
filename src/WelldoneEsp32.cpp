@@ -23,9 +23,9 @@ WelldoneEsp32::WelldoneEsp32(){
 WelldoneEsp32::~WelldoneEsp32()
 {
 }
-void WelldoneEsp32::init(void){
-  uart_begin();  
+void WelldoneEsp32::init(void){    
   device_no_init();
+  wduart_begin();
 #if (UseWifi)
   wifi_begin();  
 #endif

@@ -16,6 +16,13 @@ class WdJson:public DeviceNo,public WdWifiSet,public BuildTime,public HttpOTA,pu
 {
   public:
     WdJson():_onOtherCMDCallback_com(nullptr), _onOtherCMDCallback_tcp(nullptr){};
+    //生成注册字符串
+    String generateRegisterJsonString(void);    
+  public:
+    bool isUartConnected[3] = {false,false,false};
+    bool isTcpConnected = false;
+  public:  
+    //命令执行结果字符串生成
     template<typename T>
     String getJsonString(String cmdCode, T result){
       JsonDocument output_doc;       
@@ -57,6 +64,7 @@ class WdJson:public DeviceNo,public WdWifiSet,public BuildTime,public HttpOTA,pu
     CommandCallback_com _onOtherCMDCallback_com;
     CommandCallback_tcp _onOtherCMDCallback_tcp; 
     const char* CMD_SETUP = "SETUP";
+    const char* CMD_REGISTER = "REGISTER";
     const char* CMD_OK = "OK";
     const char* CMD_FAIL_SSID_PWD = "FAIL_SSID_PWD";
     const char* CMD_OTHER = "OtherCmd";
