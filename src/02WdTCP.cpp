@@ -82,7 +82,7 @@ void WdTCP::as_server_begin(void)
  ***********************************************************/
 void WdTCP::wdudp_log(const char* str, int value){
   String str_value = String(value);
-  String str_log = String(str) + str_value;
+  String str_log = String(str) + str_value + "\n";
   log_i("%s",str_log.c_str()); 
   if(wifi_isConnected){
     wd_udp->broadcastTo(str_log.c_str(), _udp_port);
@@ -94,7 +94,9 @@ void WdTCP::wdudp_log(const char* str, int value){
  * @param str 
  ***********************************************************/
 void WdTCP::wdudp_log(const char* str){
-  log_i("%s",str); 
+  String str_value = String(str);
+  String str_log = String(str) + "\n";
+  log_i("%s",str_log.c_str()); 
   if(wifi_isConnected){
     wd_udp->broadcastTo(str, _udp_port);
   }
