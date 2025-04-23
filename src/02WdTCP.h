@@ -21,6 +21,7 @@ class WdTCP: public WdOTA
     void as_server_begin(void);
     void wdudp_log(const char* str, int value);
     void wdudp_log(const char* str);
+    void wdudp_log(const char* format, ...);
   public:
     bool wifi_isConnected;
   private:

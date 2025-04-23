@@ -101,6 +101,24 @@ void WdTCP::wdudp_log(const char* str){
     wd_udp->broadcastTo(str, _udp_port);
   }
 }
+void WdTCP::wdudp_log(const char* format, ...)
+{
+  char buffer[512];  // 定义缓冲区大小
+  va_list args;
+  va_start(args, format);
+    
+  // 使用vsnprintf进行格式化
+  vsnprintf(buffer, sizeof(buffer), format, args);
+  va_end(args);
+    
+  // 转换为String并发送
+  String logMessage = String(buffer);
+  log_i("%s",logMessage.c_str()); 
+  if(wifi_isConnected){
+    wd_udp->broadcastTo(logMessage.c_str(), _udp_port);
+  }
+}
+
 /**********************************************************
  * @brief asyncClient OnConnected
  * 

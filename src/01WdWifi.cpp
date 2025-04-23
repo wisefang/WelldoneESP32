@@ -82,6 +82,9 @@ void WdWifi::_wifi_gotIP(WiFiEvent_t event, WiFiEventInfo_t info){
   wifi_isConnected = true;
   log_i("Connected to %s",_wifi_ssid);
   log_i("IP address: %s",WiFi.localIP().toString().c_str());
+  //通过udp发送ip地址
+  
+  wdudp_log("IP address: %s",WiFi.localIP().toString().c_str());
   // Start OTA service and TCP service
   otaBegin();
 #if UseTcpClient == true
