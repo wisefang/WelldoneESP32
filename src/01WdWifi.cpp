@@ -17,6 +17,43 @@ WdWifi* WdWifi::_instance_wdwifi = NULL;
  ***********************************************************/
 WdWifi::WdWifi(){
   _instance_wdwifi = this;
+#if (isDHCP==false)
+#ifdef local_IP
+  if(_local_IP.fromString(local_IP) == false){
+    _local_IP = IPAddress(192, 168, 2, 100);
+  }  
+#else
+  _local_IP = IPAddress(192, 168, 2, 100);
+#endif
+#ifdef gateway_IP
+  if(_gateway_IP.fromString(gateway_IP) == false){
+    _gateway_IP = IPAddress(192, 168, 2, 1);
+  }
+#else
+  _gateway_IP = IPAddress(192, 168, 2, 1);
+#endif 
+#ifdef subnet_IP
+  if(_subnet_IP.fromString(subnet_IP) == false){
+    _subnet_IP = IPAddress(255, 255, 255, 0);
+  }
+#else
+  _subnet_IP = IPAddress(255, 255, 255, 0);
+#endif
+#ifdef primaryDNS_IP
+  if(_primaryDNS_IP.fromString(primaryDNS_IP) == false){
+    _primaryDNS_IP = IPAddress(8, 8, 8, 8);
+  }
+#else
+  _primaryDNS_IP = IPAddress(8, 8, 8, 8);
+#endif
+#ifdef secondaryDNS_IP
+  if(_secondaryDNS_IP.fromString(secondaryDNS_IP) == false){
+    _secondaryDNS_IP = IPAddress(8, 8, 4, 4);
+  }
+#else
+  _secondaryDNS_IP = IPAddress(8, 8, 4, 4);
+#endif
+#endif
 }
 /**********************************************************
  * @brief wifi init as station
@@ -36,7 +73,10 @@ void WdWifi::_wifi_init_asStaion(){
   WiFi.mode(WIFI_STA);
   WiFi.setAutoReconnect(true);
   WiFi.setHostname("CAL");
-  WiFi.setSleep(false);
+  WiFi.setSleep(false);//关闭省电模式，降低ping延迟
+#if (isDHCP==false)
+  WiFi.config(_local_IP, _gateway_IP, _subnet_IP, _primaryDNS_IP, _secondaryDNS_IP);
+#endif  
   WiFi.begin(_wifi_ssid.c_str(), _wifi_pwd.c_str());
   log_i("try to Connect to %s ......",_wifi_ssid);
 

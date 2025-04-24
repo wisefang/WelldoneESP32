@@ -20,13 +20,17 @@ class WdWifi:public WdTCP
         WdWifi* taskInstance = static_cast<WdWifi*>(pvParameters);
         taskInstance->_wifi_status();
     }
-  public:
-    
+  public:    
     bool Flag_isSet;
   private:
     static WdWifi * _instance_wdwifi;
     String _wifi_ssid;  
-    String _wifi_pwd;    
+    String _wifi_pwd;
+    IPAddress _local_IP;
+    IPAddress _gateway_IP;
+    IPAddress _subnet_IP;
+    IPAddress _primaryDNS_IP;
+    IPAddress _secondaryDNS_IP;    
     TaskHandle_t _taskHandle = NULL;
   private:
     void _wifi_init_asStaion(void);
