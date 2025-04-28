@@ -44,7 +44,12 @@ void WdJson::_deserial_string(String jsonString,AsyncClient* client)
   if (error){
     log_e("DeserializationError: %s", error.c_str());
     String err_str = getJsonString("PARSING_FAILED",error.c_str());
-    client->write(err_str.c_str());  
+    client->write(err_str.c_str());
+    if (_onNotJsonCallback_tcp) {
+      _onNotJsonCallback_tcp(jsonString,client);
+    } else {
+      log_w("onNotJsonCallback_tcp is null");
+    }  
   }else{
     JsonObject json = doc.as<JsonObject>();
     String CmdReturn=_handleGeneralCommand(json);
@@ -75,7 +80,12 @@ void WdJson::_deserial_string(String jsonString,HardwareSerial* com)
   if (error){
     log_e("DeserializationError: %s", error.c_str());
     String err_str = getJsonString("PARSING_FAILED",error.c_str());
-    com->write(err_str.c_str());  
+    com->write(err_str.c_str());
+    if (_onNotJsonCallback_com) {
+      _onNotJsonCallback_com(jsonString,com);
+    } else {
+      log_w("onNotJsonCallback_com is null");
+    }  
   }else{
     JsonObject json = doc.as<JsonObject>();
     String CmdReturn=_handleGeneralCommand(json);
@@ -101,6 +111,41 @@ void WdJson::_deserial_string(String jsonString,HardwareSerial* com)
     }
   }
 }
+/**********************************************************
+ * @brief 解析packet数据，处理通用命令，初始化回调函数
+ * 
+ * @param jsonString 
+ * @param packet 
+ ***********************************************************/
+void WdJson::_deserial_string(String jsonString,AsyncUDPPacket packet)
+{
+  JsonDocument  doc;
+  DeserializationError error = deserializeJson(doc, jsonString);
+  if (error){
+    log_e("DeserializationError: %s", error.c_str());
+    String err_str = getJsonString("PARSING_FAILED",error.c_str());
+    packet.println(err_str.c_str());
+    if (_onNotJsonCallback_udp) {
+      _onNotJsonCallback_udp(jsonString,packet);
+    } else {
+      log_w("onNotJsonCallback_udp is null");
+    }  
+  }else{
+    JsonObject json = doc.as<JsonObject>();
+    String CmdReturn=_handleGeneralCommand(json);
+    if (CmdReturn == CMD_REGISTER){
+      isTcpConnected = true;
+    } else if (CmdReturn == "OtherCmd"){
+      if (_onOtherCMDCallback_udp) {
+        _onOtherCMDCallback_udp(json,packet);
+      } else {
+        log_w("onOtherCMDCallback_udp is null");
+      }
+    } else{
+      packet.println(CmdReturn.c_str());
+    }
+  }
+} 
 /**********************************************************
  * @brief 处理通用的指令，其他指令返回OtherCmd调用回调函数
  * 

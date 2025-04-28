@@ -7,6 +7,7 @@
 static AsyncClient* tcp_client = new AsyncClient;
 static AsyncClient* esp_client = new AsyncClient;
 static AsyncUDP* wd_udp = new AsyncUDP;
+static AsyncUDP* wd_udp_server = new AsyncUDP;
 static bool asClient_isConnected ;
 static bool asServer_hasClient;
 /**********************************************************
@@ -31,10 +32,10 @@ WdTCP::WdTCP(){
 #else
   _local_port = 1234;
 #endif
-#if !defined  (UDP_PORT)
-#define UDP_PORT 10000
+#if !defined  (UdpPort)
+#define UdpPort 10000
 #endif
-  _udp_port = UDP_PORT;
+  _udp_port = UdpPort;
 }
 /**********************************************************
  * @brief as_client_begin
@@ -73,6 +74,47 @@ void WdTCP::as_server_begin(uint16_t port)
 void WdTCP::as_server_begin(void)
 {
   as_server_begin(_local_port);
+}
+/**********************************************************
+ * @brief as_udpServer_begin
+ * 
+ ***********************************************************/
+void WdTCP::as_udpServer_begin(uint16_t port)
+{
+  log_i("udp server begin on port %d \n", port);
+  if (wd_udp_server->listen(port)) {
+    log_i("UDP Listening on IP: ");
+#if WifiMode==1
+    log_i (WiFi.localIP());
+#elif WifiMode==2
+    log_i (WiFi.softAPIP());
+#endif
+    
+    wd_udp_server->onPacket([this](AsyncUDPPacket packet) {
+      // Serial.print("UDP Packet Type: ");
+      // Serial.print(packet.isBroadcast() ? "Broadcast" : packet.isMulticast() ? "Multicast" : "Unicast");
+      // Serial.print(", From: ");
+      // Serial.print(packet.remoteIP());
+      // Serial.print(":");
+      // Serial.print(packet.remotePort());
+      // Serial.print(", To: ");
+      // Serial.print(packet.localIP());
+      // Serial.print(":");
+      // Serial.print(packet.localPort());
+      // Serial.print(", Length: ");
+      // Serial.print(packet.length());
+      // Serial.print(", Data: ");
+      // Serial.write(packet.data(), packet.length());
+      // Serial.println();
+      //packet.data() save as string
+      String data_from_udp((char*)packet.data());
+      this->parseJsonString(data_from_udp, packet);      
+    });
+  }
+}
+void WdTCP::as_udpServer_begin(void)
+{
+  as_udpServer_begin(_udp_port);
 }
 /**********************************************************
  * @brief wdudp_log

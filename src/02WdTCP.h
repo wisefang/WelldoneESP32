@@ -19,6 +19,8 @@ class WdTCP: public WdOTA
     void as_client_begin(void);
     void as_server_begin(uint16_t port);
     void as_server_begin(void);
+    void as_udpServer_begin(uint16_t port);
+    void as_udpServer_begin(void);
     void wdudp_log(const char* str, int value);
     void wdudp_log(const char* str);
     void wdudp_log(const char* format, ...);

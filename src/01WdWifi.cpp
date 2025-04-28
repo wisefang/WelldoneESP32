@@ -108,6 +108,16 @@ void WdWifi::_wifi_init_asAP(){
     log_i("AP %s Started",_wifi_ssid);
   }  
   wifi_isConnected = false;
+  otaBegin();
+#if UseTcpClient == true
+  as_client_begin();
+#endif
+#if UseTcpServer == true
+  as_server_begin();
+#endif
+#if UseUdpServer == true
+  as_udpServer_begin();
+#endif
 }
 /**********************************************************
  * @brief wifi got ip
@@ -133,6 +143,9 @@ void WdWifi::_wifi_gotIP(WiFiEvent_t event, WiFiEventInfo_t info){
 #if UseTcpServer == true
   as_server_begin();
 #endif
+#if UseUdpServer == true
+  as_udpServer_begin();
+#endif
 }
 /**********************************************************
  * @brief wifi ap station connected
@@ -144,13 +157,7 @@ void WdWifi::_wifi_ap_stationConnected_static(WiFiEvent_t event, WiFiEventInfo_t
 
 void WdWifi::_wifi_ap_stationConnected(WiFiEvent_t event, WiFiEventInfo_t info){
   log_i("Station connected.");
-  otaBegin();
-#if UseTcpClient == true
-  as_client_begin();
-#endif
-#if UseTcpServer == true
-  as_server_begin();
-#endif
+  wifi_isConnected = true;
 }
 /**********************************************************
  * @brief wifi ap station disconnected
