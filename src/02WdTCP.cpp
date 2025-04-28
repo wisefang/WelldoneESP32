@@ -85,9 +85,9 @@ void WdTCP::as_udpServer_begin(uint16_t port)
   if (wd_udp_server->listen(port)) {
     log_i("UDP Listening on IP: ");
 #if WifiMode==1
-    log_i (WiFi.localIP());
+    log_i("%s", WiFi.localIP().toString().c_str());
 #elif WifiMode==2
-    log_i (WiFi.softAPIP());
+    log_i("%s", WiFi.softAPIP().toString().c_str());
 #endif
     
     wd_udp_server->onPacket([this](AsyncUDPPacket packet) {
