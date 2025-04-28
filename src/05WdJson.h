@@ -8,7 +8,7 @@
 #include "06BuildTime.h"
 #include "06HttpOTA.h"
 #include "06WdReset.h"
-#include "../src/lib/AsyncTCP-esphome/src/AsyncTCP.h"
+#include <AsyncTCP.h>
 // 回调函数类型定义
 
 typedef void (*CommandCallback_com)(const JsonObject&,HardwareSerial*);

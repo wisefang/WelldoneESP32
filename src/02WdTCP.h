@@ -1,7 +1,7 @@
 #ifndef __02WD_TCP_H__
 #define __02WD_TCP_H__
 #include <Arduino.h>
-#include "../src/lib/AsyncTCP-esphome/src/AsyncTCP.h"
+#include <AsyncTCP.h>
 #include <AsyncUDP.h>
 #include "03WdOTA.h"
 
