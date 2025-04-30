@@ -3,3 +3,7 @@
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch
+src/.DS_Store
+src/lib/.DS_Store
+src/.DS_Store
+
