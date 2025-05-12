@@ -57,7 +57,7 @@ void WdJson::_deserial_string(String jsonString,AsyncClient* client)
     if (CmdReturn == CMD_REGISTER){
       isTcpConnected = true;
     } else if (CmdReturn == "OtherCmd"){
-      handleOtherCommand_tcp(json,client);
+      handleOtherCommand(json,client);
       if (_onOtherCMDCallback_tcp) {
         _onOtherCMDCallback_tcp(json,client);
       } else {
@@ -102,7 +102,7 @@ void WdJson::_deserial_string(String jsonString,HardwareSerial* com)
       }
       
     } else if (CmdReturn == CMD_OTHER){
-      handleOtherCommand_com(json,com);
+      handleOtherCommand(json,com);
       if (_onOtherCMDCallback_com) {
         _onOtherCMDCallback_com(json, com);
       } else {
@@ -138,7 +138,7 @@ void WdJson::_deserial_string(String jsonString,AsyncUDPPacket packet)
     if (CmdReturn == CMD_REGISTER){
       isTcpConnected = true;
     } else if (CmdReturn == "OtherCmd"){
-      handleOtherCommand_udp(json,packet);
+      handleOtherCommand(json,packet);
       if (_onOtherCMDCallback_udp) {
         _onOtherCMDCallback_udp(json,packet);
       } else {

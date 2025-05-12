@@ -91,22 +91,6 @@ void WdTCP::as_udpServer_begin(uint16_t port)
 #endif
     
     wd_udp_server->onPacket([this](AsyncUDPPacket packet) {
-      // Serial.print("UDP Packet Type: ");
-      // Serial.print(packet.isBroadcast() ? "Broadcast" : packet.isMulticast() ? "Multicast" : "Unicast");
-      // Serial.print(", From: ");
-      // Serial.print(packet.remoteIP());
-      // Serial.print(":");
-      // Serial.print(packet.remotePort());
-      // Serial.print(", To: ");
-      // Serial.print(packet.localIP());
-      // Serial.print(":");
-      // Serial.print(packet.localPort());
-      // Serial.print(", Length: ");
-      // Serial.print(packet.length());
-      // Serial.print(", Data: ");
-      // Serial.write(packet.data(), packet.length());
-      // Serial.println();
-      //packet.data() save as string
       String data_from_udp((char*)packet.data());
       this->parseJsonString(data_from_udp, packet);      
     });
