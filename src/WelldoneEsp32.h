@@ -9,7 +9,8 @@
 #ifndef __WELLDONE_ESP32_H__
 #define __WELLDONE_ESP32_H__
 #include "00WdUart.h"
-class WelldoneEsp32:public WdUart
+#include "06WorkLed.h"
+class WelldoneEsp32:public WdUart,public WorkLed
 {
 public:
     WelldoneEsp32();

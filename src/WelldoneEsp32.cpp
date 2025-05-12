@@ -25,6 +25,7 @@ WelldoneEsp32::~WelldoneEsp32()
 }
 void WelldoneEsp32::init(void){    
   device_no_init();
+  workled_blink();
   wduart_begin();
 #if (UseWifi)
   wifi_begin();  
